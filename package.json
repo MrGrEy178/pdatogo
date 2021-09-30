@@ -1,0 +1,23 @@
+{
+  "name": "pdatogo",
+  "version": "1.0.0",
+  "description": "forum for devs",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app",
+    "start": "node app"
+  },
+  "author": "MrGrey178",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.4",
+    "fs-extra": "^10.0.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.0.8"
+  }
+}
