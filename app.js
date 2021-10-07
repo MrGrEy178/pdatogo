@@ -19,6 +19,10 @@ mongoose.connect(process.env.MONGO_URI);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// handlebars
+app.engine('.hbs', exphbs({extname: '.hbs'}));
+app.set('view engine', '.hbs');
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT);

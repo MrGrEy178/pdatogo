@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
-router.get('/', async (req, res) => {
-    
+
+// login/register page
+router.get('/login', async (req, res) => {
+    res.render('login');
 })
