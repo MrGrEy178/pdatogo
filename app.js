@@ -12,7 +12,9 @@ dotenv.config({path: path.join(__dirname, 'config', 'config.env')});
 const app = express();
 
 // connect db
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI, () => {
+    console.log('Mongo connected');
+});
 
 // Body parser
 app.use(express.urlencoded({ extended: false }));
@@ -33,4 +35,6 @@ app.use('/', require(path.join(__dirname, 'routes', 'index')));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT);
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

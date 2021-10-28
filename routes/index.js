@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const User = require('../schemas/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // test page
 // GET request
@@ -21,11 +22,14 @@ router.get('/login', async (req, res) => {
 router.post('/login', async (req, res) => {
     if (req.body) {
         try {
-            const currentUser = await User.findOne({'name': req.body.login});
+            const currentUser = await User.findOne({'name': req.body.login}).lean();
             if (currentUser) {
                 bcrypt.compare(req.body.password, currentUser.password, (err, response) => {
                     if (response) {
-                        res.redirect('/');
+                        jwt.sign({currentUser}, process.env.TOKEN_SECRET, (err, token) => {
+                            res.header('auth-token', token);
+                            res.redirect('/');
+                        });
                     }
                 });
             } else {
