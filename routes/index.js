@@ -24,10 +24,15 @@ router.post('/login', async (req, res) => {
         try {
             const currentUser = await User.findOne({'name': req.body.login}).lean();
             if (currentUser) {
+                // checking password
                 bcrypt.compare(req.body.password, currentUser.password, (err, response) => {
                     if (response) {
-                        jwt.sign({currentUser}, process.env.TOKEN_SECRET, (err, token) => {
-                            res.header('auth-token', token);
+                        // signing user using jwt
+                        jwt.sign({_id: currentUser._id}, process.env.TOKEN_SECRET, (err, token) => {
+                            res.cookie('auth-token', token, {
+                                httpOnly: true,
+                                secure: true
+                            });
                             res.redirect('/');
                         });
                     }
@@ -51,11 +56,12 @@ router.get('/signup', async (req, res) => {
     })
 });
 
-// register page
+// register
 // POST Request
-router.post('/verifyIdentity', async (req, res) => {
+router.post('/api/register', async (req, res) => {
     try {
         if (req.body) {
+            // encrypting the password using bcrypt
             bcrypt.genSalt(10, async (err, salt) => {
                 bcrypt.hash(req.body.password, salt, async (err, hash) => {
                     if (hash) {
