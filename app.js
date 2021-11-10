@@ -4,12 +4,16 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const methodOverride = require('method-override');
 const exphbs = require('express-handlebars');
+const cookieParser = require('cookie-parser');
 
 // load config
 dotenv.config({path: path.join(__dirname, 'config', 'config.env')});
 
 // initialize express
 const app = express();
+
+//cookie parser init
+app.use(cookieParser());
 
 // connect db
 mongoose.connect(process.env.MONGO_URI, () => {
