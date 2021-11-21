@@ -4,8 +4,8 @@
   "description": "forum for devs",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app",
-    "start": "node app"
+    "dev": "nodemon NODE_ENV=dev app",
+    "start": "node NODE_ENV=prod app"
   },
   "author": "MrGrey178",
   "license": "MIT",

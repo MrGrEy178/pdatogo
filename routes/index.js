@@ -2,16 +2,15 @@ const router = require('express').Router();
 const User = require('../schemas/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {verifyAuth, verifyGuest} = require('../middleware/tokenVerify')
+const {verifyAuth, verifyGuest} = require('../middleware/tokenVerify');
 
 // test page
 // GET request
 router.get('/', async (req, res) => {
-    console.log(req.cookies);
-    res.render('test');
+    res.render('main');
 });
 
-// login page 
+// login
 // GET Request
 router.get('/login', verifyGuest, async (req, res) => {
     res.render('login', {
@@ -19,9 +18,9 @@ router.get('/login', verifyGuest, async (req, res) => {
     });
 });
 
-// login page 
+// login
 // POST Request
-router.post('/api/login', async (req, res) => {
+router.post('/api/login', verifyGuest, async (req, res) => {
     if (req.body) {
         try {
             const currentUser = await User.findOne({'name': req.body.login}).lean();
@@ -31,10 +30,19 @@ router.post('/api/login', async (req, res) => {
                     if (response) {
                         // signing user using jwt
                         jwt.sign({_id: currentUser._id}, process.env.TOKEN_SECRET, (err, token) => {
-                            res.cookie('auth-token', token, {
-                                httpOnly: true
-                            });
-                            res.redirect('/');
+                            // not using secure cookies if project is running in dev mode and vica versa
+                            if(process.env.NODE_ENV === 'dev'){
+                                res.cookie('auth-token', token, {
+                                    httpOnly: true
+                                })
+                                .redirect('/');
+                            }else if(process.env.NODE_ENV === 'prod'){
+                                res.cookie('auth-token', token, {
+                                    httpOnly: true,
+                                    secure: true
+                                });
+                                res.redirect('/');
+                            }
                         });
                     }
                 });
