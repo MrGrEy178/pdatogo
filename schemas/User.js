@@ -1,4 +1,3 @@
-const { truncate } = require('fs-extra');
 const mongoose = require('mongoose');
 
 const User = new mongoose.Schema({
@@ -13,6 +12,10 @@ const User = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    role: {
+        type: String,
+        required: true
     }
 });
 
